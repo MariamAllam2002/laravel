@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  
+  my_app:
+    container_name: app
+    image: webdevops/php-apache-dev:8.1-alpine
+    environment:
+      PHP_EXTENSION_MYSQLI: 1
+      PHP_EXTENSION_SOCKETS: 1
+      PHP_EXTENSION_AMQP: 1
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html 
+
+  # Laravel application service
+  # app:
+  #   container_name: laarvel_docker
+  #   build: .
+  #   ports:
+  #     - "9002:9000"
+  #     - "8000:8000"
+  #   volumes:
+  #     - ./laravel-app:/var/www/html 
+
+  rabbitmq:
+    image: rabbitmq:3.9-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+  # MySQL database service
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: mariam
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql 
+volumes:
+  db_data:  
+  
